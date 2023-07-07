@@ -11,9 +11,13 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
-const user_entity_1 = require("./user.entity");
+const user_entity_1 = require("./users/user.entity");
 const jwt_1 = require("@nestjs/jwt");
+const protect_middleware_1 = require("./protect.middleware");
 let AppModule = exports.AppModule = class AppModule {
+    configure(consumer) {
+        consumer.apply(protect_middleware_1.ProtectMiddleware).forRoutes('api/user');
+    }
 };
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
@@ -30,11 +34,11 @@ exports.AppModule = AppModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.Users]),
             jwt_1.JwtModule.register({
                 secret: 'secret',
-                signOptions: { expiresIn: '1d' }
-            })
+                signOptions: { expiresIn: '1d' },
+            }),
         ],
         controllers: [app_controller_1.AppController],
-        providers: [app_service_1.AppService],
+        providers: [app_service_1.AppService, protect_middleware_1.ProtectMiddleware],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

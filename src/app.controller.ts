@@ -50,6 +50,7 @@ export class AppController {
     response.cookie('jwt', jwt, { httpOnly: true });
 
     return {
+      email: user.email,
       message: 'Login successful'
     };
   }
