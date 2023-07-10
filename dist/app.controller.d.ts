@@ -7,7 +7,6 @@ export declare class AppController {
     constructor(appService: AppService, jwtService: JwtService);
     register(email: string, password: string): Promise<import("./users/user.entity").Users>;
     login(email: string, password: string, response: Response): Promise<{
-        email: string;
         message: string;
     }>;
     user(request: Request): Promise<{

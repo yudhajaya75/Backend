@@ -50,7 +50,6 @@ export class AppController {
     response.cookie('jwt', jwt, { httpOnly: true });
 
     return {
-      email: user.email,
       message: 'Login successful'
     };
   }
@@ -60,6 +59,10 @@ export class AppController {
     try {
       const cookie = request.cookies['jwt'];
 
+      if (!cookie) {
+        throw new UnauthorizedException();
+      }
+
       const data = await this.jwtService.verifyAsync(cookie);
 
       if (!data) {
@@ -67,6 +70,10 @@ export class AppController {
       }
 
       const user = await this.appService.findOne({ id: data['id'] });
+
+      if (!user) {
+        throw new UnauthorizedException();
+      }
 
       const { password, ...result } = user;
 
@@ -84,27 +91,4 @@ export class AppController {
       message: 'Logout successful'
     }
   }
-
-  //   @Delete('user')
-  // async deleteUser(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
-  //   try {
-  //     const cookie = request.cookies['jwt'];
-
-  //     const data = await this.jwtService.verifyAsync(cookie);
-
-  //     if (!data) {
-  //       throw new UnauthorizedException();
-  //     }
-
-  //     await this.appService.delete({ id: data['id'] });
-
-  //     response.clearCookie('jwt');
-
-  //     return {
-  //       message: 'User deleted successfully'
-  //     };
-  //   } catch (e) {
-  //     throw new UnauthorizedException();
-  //   }
-  // } 
 }

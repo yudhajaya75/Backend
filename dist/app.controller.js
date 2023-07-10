@@ -43,18 +43,23 @@ let AppController = exports.AppController = class AppController {
         const jwt = await this.jwtService.signAsync({ id: user.id });
         response.cookie('jwt', jwt, { httpOnly: true });
         return {
-            email: user.email,
             message: 'Login successful'
         };
     }
     async user(request) {
         try {
             const cookie = request.cookies['jwt'];
+            if (!cookie) {
+                throw new common_1.UnauthorizedException();
+            }
             const data = await this.jwtService.verifyAsync(cookie);
             if (!data) {
                 throw new common_1.UnauthorizedException();
             }
             const user = await this.appService.findOne({ id: data['id'] });
+            if (!user) {
+                throw new common_1.UnauthorizedException();
+            }
             const { password, ...result } = user;
             return result;
         }
