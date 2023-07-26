@@ -13,6 +13,7 @@ import { ProtectMiddleware } from './protect.middleware';
       host: 'localhost',
       port: 3306,
       username: 'root',
+      password: 'password',
       database: 'konseling',
       entities: [Users],
       synchronize: true,

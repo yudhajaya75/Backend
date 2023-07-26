@@ -43,6 +43,7 @@ let AppController = exports.AppController = class AppController {
         const jwt = await this.jwtService.signAsync({ id: user.id });
         response.cookie('jwt', jwt, { httpOnly: true });
         return {
+            token: jwt,
             message: 'Login successful'
         };
     }

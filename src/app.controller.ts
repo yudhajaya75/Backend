@@ -50,6 +50,7 @@ export class AppController {
     response.cookie('jwt', jwt, { httpOnly: true });
 
     return {
+      token: jwt,
       message: 'Login successful'
     };
   }
@@ -89,6 +90,6 @@ export class AppController {
 
     return {
       message: 'Logout successful'
-    }
+    };
   }
 }
